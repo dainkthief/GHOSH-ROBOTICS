@@ -1,0 +1,93 @@
+=== GRRFP + Rahul.ai Unified Cognitive IoT Mode ===
+[RKC] 2025-10-11 09:11:54 | NRPI | TRACE | {"sample": {"attention": 0.7371356974937926, "relaxation": 0.583651886004161, "intent": 0.17749191038981516}, "ri": 0.6603937917489768}
+[RKC] 2025-10-11 09:11:54 | Decoder | INFO | {"ri": 0.6603937917489768, "intent": "greet"}
+[RKC] 2025-10-11 09:11:54 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:11:54 | UCG | INFO | {"energy": 0.66, "action": "ALLOW"}
+[RKC] 2025-10-11 09:11:54 | Spandan | INFO | {"intent": "greet", "state": {"lights": false}}
+[RKC] 2025-10-11 09:11:59 | NRPI | TRACE | {"sample": {"attention": 0.783281746830544, "relaxation": 0.06451016340482818, "intent": 0.7792900851645503}, "ri": 0.4238959551176861}
+[RKC] 2025-10-11 09:11:59 | Decoder | INFO | {"ri": 0.4238959551176861, "intent": "lights_on"}
+[RKC] 2025-10-11 09:11:59 | RahulAI | DEBUG | {"intent": "lights_on", "text": "Turning on lights."}
+[RKC] 2025-10-11 09:11:59 | UCG | INFO | {"energy": 0.42, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:00 | IoT | ERROR | "HTTPConnectionPool(host='192.168.0.105', port=80): Max retries exceeded with url: /relay_on (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x7350fd5ac0>, 'Connection to 192.168.0.105 timed out. (connect timeout=1)'))"
+[RKC] 2025-10-11 09:12:00 | Spandan | INFO | {"intent": "lights_on", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:04 | NRPI | TRACE | {"sample": {"attention": 0.2775851534355208, "relaxation": 0.2981237637410813, "intent": 0.2645719457437462}, "ri": 0.28785445858830105}
+[RKC] 2025-10-11 09:12:04 | Decoder | INFO | {"ri": 0.28785445858830105, "intent": "idle"}
+[RKC] 2025-10-11 09:12:04 | RahulAI | DEBUG | {"intent": "idle", "text": ""}
+[RKC] 2025-10-11 09:12:04 | UCG | INFO | {"energy": 0.29, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:04 | IoT | INFO | {"Relay": "OFF"}
+[RKC] 2025-10-11 09:12:04 | Spandan | INFO | {"intent": "idle", "state": {"lights": false}}
+[RKC] 2025-10-11 09:12:05 | NRPI | TRACE | {"sample": {"attention": 0.39077534502841416, "relaxation": 0.5665214681284487, "intent": 0.7866699730124991}, "ri": 0.47864840657843144}
+[RKC] 2025-10-11 09:12:05 | Decoder | INFO | {"ri": 0.47864840657843144, "intent": "lights_on"}
+[RKC] 2025-10-11 09:12:05 | RahulAI | DEBUG | {"intent": "lights_on", "text": "Turning on lights."}
+[RKC] 2025-10-11 09:12:05 | UCG | INFO | {"energy": 0.48, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:06 | IoT | ERROR | "HTTPConnectionPool(host='192.168.0.105', port=80): Max retries exceeded with url: /relay_on (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x735102cec0>, 'Connection to 192.168.0.105 timed out. (connect timeout=1)'))"
+[RKC] 2025-10-11 09:12:06 | Spandan | INFO | {"intent": "lights_on", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:11 | NRPI | TRACE | {"sample": {"attention": 0.9511323899530085, "relaxation": 0.23038211648535667, "intent": 0.2718371436291248}, "ri": 0.5907572532191826}
+[RKC] 2025-10-11 09:12:11 | Decoder | INFO | {"ri": 0.5907572532191826, "intent": "lights_on"}
+[RKC] 2025-10-11 09:12:11 | RahulAI | DEBUG | {"intent": "lights_on", "text": "Turning on lights."}
+[RKC] 2025-10-11 09:12:11 | UCG | INFO | {"energy": 0.59, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:12 | IoT | ERROR | "HTTPConnectionPool(host='192.168.0.105', port=80): Max retries exceeded with url: /relay_on (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x735102d580>, 'Connection to 192.168.0.105 timed out. (connect timeout=1)'))"
+[RKC] 2025-10-11 09:12:12 | Spandan | INFO | {"intent": "lights_on", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:17 | NRPI | TRACE | {"sample": {"attention": 0.645292859717924, "relaxation": 0.6125069436410617, "intent": 0.915092169701346}, "ri": 0.628899901679493}
+[RKC] 2025-10-11 09:12:17 | Decoder | INFO | {"ri": 0.628899901679493, "intent": "greet"}
+[RKC] 2025-10-11 09:12:17 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:17 | UCG | INFO | {"energy": 0.63, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:17 | Spandan | INFO | {"intent": "greet", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:21 | NRPI | TRACE | {"sample": {"attention": 0.5989375545511374, "relaxation": 0.8880012031117629, "intent": 0.5885243147604695}, "ri": 0.7434693788314501}
+[RKC] 2025-10-11 09:12:21 | Decoder | INFO | {"ri": 0.7434693788314501, "intent": "greet"}
+[RKC] 2025-10-11 09:12:21 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:21 | UCG | INFO | {"energy": 0.74, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:21 | Spandan | INFO | {"intent": "greet", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:26 | NRPI | TRACE | {"sample": {"attention": 0.8093001130691311, "relaxation": 0.4801301064746273, "intent": 0.5415279354734136}, "ri": 0.6447151097718792}
+[RKC] 2025-10-11 09:12:26 | Decoder | INFO | {"ri": 0.6447151097718792, "intent": "greet"}
+[RKC] 2025-10-11 09:12:26 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:26 | UCG | INFO | {"energy": 0.64, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:26 | Spandan | INFO | {"intent": "greet", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:31 | NRPI | TRACE | {"sample": {"attention": 0.7731723821871325, "relaxation": 0.6233859369317342, "intent": 0.19699343529074165}, "ri": 0.6982791595594333}
+[RKC] 2025-10-11 09:12:31 | Decoder | INFO | {"ri": 0.6982791595594333, "intent": "greet"}
+[RKC] 2025-10-11 09:12:31 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:31 | UCG | INFO | {"energy": 0.7, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:31 | Spandan | INFO | {"intent": "greet", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:36 | NRPI | TRACE | {"sample": {"attention": 0.8904481882305852, "relaxation": 0.26750898054040206, "intent": 0.6922519752297481}, "ri": 0.5789785843854937}
+[RKC] 2025-10-11 09:12:36 | Decoder | INFO | {"ri": 0.5789785843854937, "intent": "lights_on"}
+[RKC] 2025-10-11 09:12:36 | RahulAI | DEBUG | {"intent": "lights_on", "text": "Turning on lights."}
+[RKC] 2025-10-11 09:12:36 | UCG | INFO | {"energy": 0.58, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:37 | IoT | ERROR | "HTTPConnectionPool(host='192.168.0.105', port=80): Max retries exceeded with url: /relay_on (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x735102dd00>, 'Connection to 192.168.0.105 timed out. (connect timeout=1)'))"
+[RKC] 2025-10-11 09:12:37 | Spandan | INFO | {"intent": "lights_on", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:41 | NRPI | TRACE | {"sample": {"attention": 0.7223391954171943, "relaxation": 0.551926030842428, "intent": 0.9921510132529816}, "ri": 0.6371326131298112}
+[RKC] 2025-10-11 09:12:41 | Decoder | INFO | {"ri": 0.6371326131298112, "intent": "greet"}
+[RKC] 2025-10-11 09:12:41 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:41 | UCG | INFO | {"energy": 0.64, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:41 | Spandan | INFO | {"intent": "greet", "state": {"lights": true}}
+[RKC] 2025-10-11 09:12:46 | NRPI | TRACE | {"sample": {"attention": 0.44015178953796985, "relaxation": 0.039652756229593855, "intent": 0.2294706019816437}, "ri": 0.23990227288378185}
+[RKC] 2025-10-11 09:12:46 | Decoder | INFO | {"ri": 0.23990227288378185, "intent": "idle"}
+[RKC] 2025-10-11 09:12:46 | RahulAI | DEBUG | {"intent": "idle", "text": ""}
+[RKC] 2025-10-11 09:12:46 | UCG | INFO | {"energy": 0.24, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:46 | IoT | INFO | {"Relay": "OFF"}
+[RKC] 2025-10-11 09:12:46 | Spandan | INFO | {"intent": "idle", "state": {"lights": false}}
+[RKC] 2025-10-11 09:12:47 | NRPI | TRACE | {"sample": {"attention": 0.5749490500109057, "relaxation": 0.8162201154612704, "intent": 0.9161044641276714}, "ri": 0.695584582736088}
+[RKC] 2025-10-11 09:12:47 | Decoder | INFO | {"ri": 0.695584582736088, "intent": "greet"}
+[RKC] 2025-10-11 09:12:47 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:47 | UCG | INFO | {"energy": 0.7, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:47 | Spandan | INFO | {"intent": "greet", "state": {"lights": false}}
+[RKC] 2025-10-11 09:12:52 | NRPI | TRACE | {"sample": {"attention": 0.9915349351913858, "relaxation": 0.33299373899588214, "intent": 0.15745530012729325}, "ri": 0.662264337093634}
+[RKC] 2025-10-11 09:12:52 | Decoder | INFO | {"ri": 0.662264337093634, "intent": "greet"}
+[RKC] 2025-10-11 09:12:52 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:52 | UCG | INFO | {"energy": 0.66, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:52 | Spandan | INFO | {"intent": "greet", "state": {"lights": false}}
+[RKC] 2025-10-11 09:12:57 | NRPI | TRACE | {"sample": {"attention": 0.719077775892968, "relaxation": 0.7850579437639322, "intent": 0.9575551929854557}, "ri": 0.75206785982845}
+[RKC] 2025-10-11 09:12:57 | Decoder | INFO | {"ri": 0.75206785982845, "intent": "greet"}
+[RKC] 2025-10-11 09:12:57 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:12:57 | UCG | INFO | {"energy": 0.75, "action": "ALLOW"}
+[RKC] 2025-10-11 09:12:57 | Spandan | INFO | {"intent": "greet", "state": {"lights": false}}
+[RKC] 2025-10-11 09:13:01 | NRPI | TRACE | {"sample": {"attention": 0.410631506561178, "relaxation": 0.2937763861089576, "intent": 0.12058880810923489}, "ri": 0.3522039463350678}
+[RKC] 2025-10-11 09:13:01 | Decoder | INFO | {"ri": 0.3522039463350678, "intent": "idle"}
+[RKC] 2025-10-11 09:13:01 | RahulAI | DEBUG | {"intent": "idle", "text": ""}
+[RKC] 2025-10-11 09:13:01 | UCG | INFO | {"energy": 0.35, "action": "ALLOW"}
+[RKC] 2025-10-11 09:13:01 | Spandan | INFO | {"intent": "idle", "state": {"lights": false}}
+[RKC] 2025-10-11 09:13:02 | NRPI | TRACE | {"sample": {"attention": 0.5786196475272379, "relaxation": 0.7821365967984613, "intent": 0.35176851688888333}, "ri": 0.6803781221628495}
+[RKC] 2025-10-11 09:13:02 | Decoder | INFO | {"ri": 0.6803781221628495, "intent": "greet"}
+[RKC] 2025-10-11 09:13:02 | RahulAI | DEBUG | {"intent": "greet", "text": "Hello there, friend."}
+[RKC] 2025-10-11 09:13:02 | UCG | INFO | {"energy": 0.68, "action": "ALLOW"}
+[RKC] 2025-10-11 09:13:02 | Spandan | INFO | {"intent": "greet", "state": {"lights": false}}
+Interrupted.

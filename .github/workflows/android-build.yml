@@ -4,10 +4,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,28 +20,30 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            python3 python3-pip openjdk-17-jdk zip unzip \
-            libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
-
-      - name: Install Buildozer
-        run: |
+          sudo apt-get install -y python3 python3-pip zip unzip openjdk-17-jdk \
+              libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
           pip3 install --upgrade pip setuptools wheel
           pip3 install buildozer cython
 
-      - name: Create writable Android paths
+      - name: Prepare Android SDK + NDK
         run: |
-          mkdir -p $HOME/android-sdk
-          mkdir -p $HOME/android-ndk
-          echo "ANDROIDSDK=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROIDNDK=$HOME/android-ndk" >> $GITHUB_ENV
-          echo "PATH=$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
+          mkdir -p /home/runner/android-sdk/cmdline-tools/latest
+          mkdir -p /home/runner/android-ndk
+          cd /home/runner/android-sdk/cmdline-tools/latest
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk.zip
+          unzip -q sdk.zip && rm sdk.zip
+          echo "y" | ./bin/sdkmanager --sdk_root=/home/runner/android-sdk \
+            "platform-tools" "build-tools;33.0.0" "platforms;android-33"
+          cd /home/runner/android-ndk
+          wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip -O ndk.zip
+          unzip -q ndk.zip && rm ndk.zip
+          mv android-ndk-r25b/* . && rm -rf android-ndk-r25b
 
       - name: Build APK
         env:
-          ANDROIDSDK: ${{ env.ANDROIDSDK }}
-          ANDROIDNDK: ${{ env.ANDROIDNDK }}
-          PATH: ${{ env.PATH }}
+          ANDROIDSDK: /home/runner/android-sdk
+          ANDROIDNDK: /home/runner/android-ndk
+          PATH: /home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
         run: buildozer android debug
 
       - name: Upload APK Artifact

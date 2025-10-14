@@ -33,7 +33,7 @@ jobs:
           pip3 install --upgrade pip setuptools wheel
           pip3 install buildozer cython
 
-      - name: Set environment paths (SDK/NDK writable)
+      - name: Create writable Android paths
         run: |
           mkdir -p $HOME/android-sdk
           mkdir -p $HOME/android-ndk
@@ -41,7 +41,7 @@ jobs:
           echo "ANDROIDNDK=$HOME/android-ndk" >> $GITHUB_ENV
           echo "PATH=$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-      - name: Build APK (API 33 / min 24)
+      - name: Build APK
         env:
           ANDROIDSDK: ${{ env.ANDROIDSDK }}
           ANDROIDNDK: ${{ env.ANDROIDNDK }}

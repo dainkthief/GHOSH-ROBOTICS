@@ -3,59 +3,37 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+      - uses: actions/setup-java@v4
         with:
           distribution: zulu
           java-version: 17
-
-      - name: Install dependencies
+      - name: Install Buildozer
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3 python3-pip openjdk-17-jdk zip unzip git
-          pip3 install --upgrade pip setuptools wheel
-          pip3 install buildozer cython
-
-      - name: Prepare Android SDK + cmdline-tools
+          sudo apt-get update -y
+          sudo apt-get install -y unzip wget zlib1g-dev
+          python3 -m pip install --upgrade pip setuptools wheel cython buildozer
+      - name: Setup Android SDK + NDK
         run: |
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          cd $HOME/android-sdk/cmdline-tools
+          mkdir -p $HOME/android-sdk/cmdline-tools/latest
+          cd $HOME/android-sdk/cmdline-tools/latest
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-          unzip -qo sdk.zip -d $HOME/android-sdk/cmdline-tools
-          mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest || true
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
-          sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "build-tools;33.0.0" "platforms;android-33"
-
-      - name: Prepare Android NDK
-        run: |
-          mkdir -p $HOME/android-ndk
-          cd $HOME/android-ndk
-          wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip -O ndk.zip
-          unzip -qo ndk.zip && mv android-ndk-r25b/* . && rm -rf android-ndk-r25b ndk.zip
-          export ANDROID_NDK_HOME=$HOME/android-ndk
-          echo "NDK installed at $ANDROID_NDK_HOME"
-
+          unzip -qo sdk.zip && rm sdk.zip
+          export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
+          yes | sdkmanager --sdk_root=$HOME/android-sdk --licenses || true
+          sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2" "ndk;25.2.9519653"
       - name: Build APK
         run: |
-          export PATH=$HOME/.local/bin:$PATH
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          export ANDROID_NDK_HOME=$HOME/android-ndk
+          cd $GITHUB_WORKSPACE
           buildozer android debug
-
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: brahma_ai_vit_apk
+          name: GHOSH_Robotics_APK
           path: bin/*.apk

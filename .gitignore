@@ -1,0 +1,9 @@
+# Ignore caches, temp, build
+.cache/
+.buildozer/
+.android/
+.kivy/
+.local/
+__pycache__/
+*.pyc
+*.log

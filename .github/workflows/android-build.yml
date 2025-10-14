@@ -23,9 +23,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3 python3-pip zip unzip openjdk-17-jdk \
             libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
-          pip3 install --upgrade pip setuptools wheel
-          pip3 install --user buildozer cython
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install --user buildozer cython
+          # Explicitly expose ~/.local/bin and link into global PATH
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+          sudo ln -sf $HOME/.local/bin/buildozer /usr/local/bin/buildozer || true
+          sudo chmod +x $HOME/.local/bin/buildozer || true
+          buildozer version || true
 
       - name: Prepare Android SDK + NDK
         run: |
@@ -47,8 +51,9 @@ jobs:
           ANDROID_HOME: /home/runner/android-sdk
           ANDROID_SDK_ROOT: /home/runner/android-sdk
           ANDROID_NDK_HOME: /home/runner/android-ndk
-          PATH: /home/runner/.local/bin:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
+          PATH: /usr/local/bin:/home/runner/.local/bin:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
         run: |
+          which buildozer || (echo "❌ Buildozer not in PATH"; exit 1)
           buildozer android debug
 
       - name: Upload APK Artifact

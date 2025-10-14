@@ -33,12 +33,19 @@ jobs:
           pip3 install --upgrade pip setuptools wheel
           pip3 install buildozer cython
 
-      - name: Configure Android Targets
+      - name: Set environment paths (SDK/NDK writable)
         run: |
-          echo "android.api = 33"
-          echo "android.minapi = 24"
+          mkdir -p $HOME/android-sdk
+          mkdir -p $HOME/android-ndk
+          echo "ANDROIDSDK=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROIDNDK=$HOME/android-ndk" >> $GITHUB_ENV
+          echo "PATH=$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-      - name: Build APK
+      - name: Build APK (API 33 / min 24)
+        env:
+          ANDROIDSDK: ${{ env.ANDROIDSDK }}
+          ANDROIDNDK: ${{ env.ANDROIDNDK }}
+          PATH: ${{ env.PATH }}
         run: buildozer android debug
 
       - name: Upload APK Artifact

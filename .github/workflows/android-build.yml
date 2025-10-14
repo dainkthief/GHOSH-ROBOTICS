@@ -18,40 +18,33 @@ jobs:
           distribution: zulu
           java-version: 17
 
-      - name: Install Python + Buildozer (system-wide)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3 python3-pip zip unzip openjdk-17-jdk \
-            libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
-          sudo pip3 install --upgrade pip setuptools wheel
-          sudo pip3 install buildozer cython
-          which buildozer || sudo ln -s $(which python3) /usr/local/bin/python || true
-          echo "✅ Buildozer installed globally at: $(which buildozer)"
-          buildozer --version || true
-
-      - name: Prepare Android SDK + NDK
-        run: |
-          mkdir -p /home/runner/android-sdk/cmdline-tools
-          mkdir -p /home/runner/android-ndk
-          cd /home/runner/android-sdk/cmdline-tools
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk.zip
-          unzip -q sdk.zip && rm sdk.zip
-          mv cmdline-tools latest
-          yes | /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk \
-            "platform-tools" "build-tools;33.0.0" "platforms;android-33"
-          cd /home/runner/android-ndk
-          wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip -O ndk.zip
-          unzip -q ndk.zip && rm ndk.zip
-          mv android-ndk-r25b/* . && rm -rf android-ndk-r25b
-
-      - name: Build APK
+      - name: Install dependencies + Build APK (single step)
         env:
           ANDROID_HOME: /home/runner/android-sdk
           ANDROID_SDK_ROOT: /home/runner/android-sdk
           ANDROID_NDK_HOME: /home/runner/android-ndk
-          PATH: /usr/local/bin:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
         run: |
-          which buildozer
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip zip unzip openjdk-17-jdk \
+            libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev wget
+          pip3 install --upgrade pip setuptools wheel
+          pip3 install buildozer cython
+
+          mkdir -p $ANDROID_HOME/cmdline-tools $ANDROID_NDK_HOME
+          cd $ANDROID_HOME/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk.zip
+          unzip -q sdk.zip && rm sdk.zip
+          mv cmdline-tools latest
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
+            "platform-tools" "build-tools;33.0.0" "platforms;android-33"
+
+          cd $ANDROID_NDK_HOME
+          wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip -O ndk.zip
+          unzip -q ndk.zip && rm ndk.zip
+          mv android-ndk-r25b/* . && rm -rf android-ndk-r25b
+
+          export PATH=$PATH:$HOME/.local/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin
+          echo "PATH now includes Buildozer: $(which buildozer || echo not_found)"
           buildozer android debug
 
       - name: Upload APK Artifact

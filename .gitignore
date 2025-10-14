@@ -1,4 +1,3 @@
-# Ignore caches, temp, build
 .cache/
 .buildozer/
 .android/

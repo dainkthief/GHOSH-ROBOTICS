@@ -7,29 +7,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: zulu
-          java-version: 17
-
-      - name: Install dependencies + Build APK (single step)
-        env:
-          ANDROID_HOME: /home/runner/android-sdk
-          ANDROID_SDK_ROOT: /home/runner/android-sdk
-          ANDROID_NDK_HOME: /home/runner/android-ndk
+      - name: Build APK in single shell session
+        shell: bash
         run: |
+          set -e
+          echo "=== Installing dependencies ==="
           sudo apt-get update
           sudo apt-get install -y python3 python3-pip zip unzip openjdk-17-jdk \
             libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev wget
-          pip3 install --upgrade pip setuptools wheel
-          pip3 install buildozer cython
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install buildozer cython
 
+          export PATH=$PATH:$HOME/.local/bin
+          echo "PATH => $PATH"
+          which buildozer || { echo "❌ buildozer not found"; exit 1; }
+          buildozer --version
+
+          echo "=== Preparing SDK/NDK ==="
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_NDK_HOME=$HOME/android-ndk
           mkdir -p $ANDROID_HOME/cmdline-tools $ANDROID_NDK_HOME
           cd $ANDROID_HOME/cmdline-tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk.zip
@@ -37,16 +38,15 @@ jobs:
           mv cmdline-tools latest
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
             "platform-tools" "build-tools;33.0.0" "platforms;android-33"
-
           cd $ANDROID_NDK_HOME
           wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip -O ndk.zip
           unzip -q ndk.zip && rm ndk.zip
           mv android-ndk-r25b/* . && rm -rf android-ndk-r25b
+          cd $GITHUB_WORKSPACE
 
-          export PATH=$PATH:$HOME/.local/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin
-          echo "PATH now includes Buildozer: $(which buildozer || echo not_found)"
+          echo "=== Building APK ==="
           buildozer android debug
-
+          
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:

@@ -17,24 +17,24 @@ jobs:
           distribution: zulu
           java-version: 17
 
-      - name: Install system dependencies
+      - name: Install build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             python3 python3-pip openjdk-17-jdk zip unzip \
             libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
 
-      - name: Install Buildozer
+      - name: Install Python and Buildozer
         run: |
           pip3 install --upgrade pip setuptools wheel
           pip3 install buildozer cython
 
-      - name: Verify Buildozer targets
+      - name: Verify Android Targets
         run: |
           echo "android.api = 33"
           echo "android.minapi = 24"
 
-      - name: Build APK (API 33 / min 24)
+      - name: Build APK (API 33, Min 24)
         run: buildozer android debug
 
       - name: Upload APK Artifact

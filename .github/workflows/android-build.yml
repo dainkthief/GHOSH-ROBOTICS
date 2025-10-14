@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: 3.100
+          python-version: 3.1000
       - uses: actions/setup-java@v4
         with:
           distribution: zulu

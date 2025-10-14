@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,15 +18,16 @@ jobs:
           distribution: zulu
           java-version: 17
 
-      - name: Install dependencies
+      - name: Install Python + Buildozer
         run: |
           sudo apt-get update
           sudo apt-get install -y python3 python3-pip zip unzip openjdk-17-jdk \
-              libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
+            libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev
           pip3 install --upgrade pip setuptools wheel
-          pip3 install buildozer cython
+          pip3 install --user buildozer cython
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Prepare Android SDK + NDK (cmdline-tools fix)
+      - name: Prepare Android SDK + NDK
         run: |
           mkdir -p /home/runner/android-sdk/cmdline-tools
           mkdir -p /home/runner/android-ndk
@@ -45,8 +47,9 @@ jobs:
           ANDROID_HOME: /home/runner/android-sdk
           ANDROID_SDK_ROOT: /home/runner/android-sdk
           ANDROID_NDK_HOME: /home/runner/android-ndk
-          PATH: /home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
-        run: buildozer android debug
+          PATH: /home/runner/.local/bin:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:$PATH
+        run: |
+          buildozer android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4

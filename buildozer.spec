@@ -11,6 +11,5 @@ fullscreen = 0
 android.api = 33
 android.minapi = 24
 android.accept_sdk_license = True
-# Absolute paths (no variable expansion)
 android.sdk_path = /home/runner/android-sdk
 android.ndk_path = /home/runner/android-ndk

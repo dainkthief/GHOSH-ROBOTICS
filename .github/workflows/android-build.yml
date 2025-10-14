@@ -24,7 +24,7 @@ jobs:
           pip3 install buildozer cython
       - name: Build APK
         run: buildozer android debug
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: apk
           path: bin/*.apk

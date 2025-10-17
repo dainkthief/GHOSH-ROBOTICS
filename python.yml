@@ -1,0 +1,42 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "**.py"
+      - "requirements.txt"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "**.py"
+      - "requirements.txt"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run all Python scripts
+        run: |
+          echo "Running all .py files in repository..."
+          for file in $(find . -type f -name "*.py"); do
+            echo "Executing $file"
+            python "$file" || echo "⚠️  $file failed or exited with error"
+          done
+
+      - name: Run tests (optional)
+        run: |
+          if [ -d tests ]; then pytest; else echo "No tests directory"; fi

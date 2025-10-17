@@ -23,6 +23,11 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run tests (if any)
+      - name: Run Python scripts
         run: |
-          if [ -d tests ]; then pytest; else echo "No tests folder found"; fi
+          echo "Running main.py"
+          python main.py || echo "main.py not found or failed"
+
+      - name: Run tests (optional)
+        run: |
+          if [ -d tests ]; then pytest; else echo "No tests directory"; fi

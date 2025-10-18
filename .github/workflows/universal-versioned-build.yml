@@ -1,0 +1,121 @@
+name: GHOSH ROBOTICS – Universal Auto Version Build & Release
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Auto bump version numbers
+        run: |
+          echo "---- Auto increment versions ----"
+          # Android version bump
+          if [ -f app/build.gradle ]; then
+            verCode=$(grep -Po '(?<=versionCode )\d+' app/build.gradle | head -1)
+            verName=$(grep -Po '(?<=versionName \")\d+\.\d+' app/build.gradle | head -1)
+            newCode=$((verCode+1))
+            newName=$(awk -v v="$verName" 'BEGIN{split(v,a,"."); print a[1]"."(a[2]+1)}')
+            sed -i "s/versionCode $verCode/versionCode $newCode/" app/build.gradle
+            sed -i "s/versionName \"$verName\"/versionName \"$newName\"/" app/build.gradle
+            echo "Android version → $newName ($newCode)"
+          fi
+          # Python version bump
+          if [ -f __version__.py ]; then
+            pyVer=$(grep -Po '(?<=__version__ = \")\d+\.\d+' __version__.py | head -1)
+            pyNew=$(awk -v v="$pyVer" 'BEGIN{split(v,a,"."); print a[1]"."(a[2]+1)}')
+            sed -i "s/__version__ = \"$pyVer\"/__version__ = \"$pyNew\"/" __version__.py
+            echo "Python version → $pyNew"
+          fi
+          echo "VERSION_ANDROID=$newName" >> $GITHUB_ENV
+          echo "VERSION_PYTHON=$pyNew" >> $GITHUB_ENV
+
+      - name: Commit bumped versions
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "github-actions"
+          git add app/build.gradle __version__.py 2>/dev/null || true
+          git commit -m "Auto bump versions to Android:$VERSION_ANDROID Python:$VERSION_PYTHON" || echo "No changes to commit"
+          git push || true
+
+      - name: Decode keystore
+        run: echo "$KEYSTORE_BASE64" | base64 --decode > ghoshrobotics.keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      - name: Build Android release APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Build Python desktop EXE
+        run: |
+          pyinstaller --onefile --noconsole intraday_desktop.py
+          mkdir -p dist_upload
+          cp dist/intraday_desktop* dist_upload/ 2>/dev/null || true
+
+      - name: Sign Android APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: GHOSH_ROBOTICS_Universal_Build
+          path: |
+            app/build/outputs/apk/release/app-release-signed.apk
+            dist_upload/*
+
+      - name: Generate changelog with versions
+        run: |
+          echo "### GHOSH ROBOTICS Universal Build" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "**Android version:** $VERSION_ANDROID" >> CHANGELOG.md
+          echo "**Python version:** $VERSION_PYTHON" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### Recent Changes" >> CHANGELOG.md
+          git log -10 --pretty=format:"- %s" >> CHANGELOG.md
+
+      - name: Auto Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app/build/outputs/apk/release/app-release-signed.apk
+            dist_upload/*
+            CHANGELOG.md
+          tag_name: v${{ github.run_number }}
+          name: "GHOSH ROBOTICS v${{ github.run_number }}"
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+EOF
+
+# ---- Commit and push ----
+git add .github/workflows/universal-versioned-build.yml
+git commit -m "Add universal versioned CI/CD with auto changelog"
+git push

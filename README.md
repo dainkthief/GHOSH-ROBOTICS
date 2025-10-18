@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 👋 Hi, I'm **Prasenjit Ghosh (dainkthief)**
 
 ![Python CI](https://github.com/dainkthief/GHOSH-ROBOTICS/actions/workflows/python.yml/badge.svg)
@@ -57,3 +58,7 @@ Status shown live above ☝️.
 
 _This portfolio auto-updates using GitHub Actions._  
 ✨ “Automation is the new Intelligence.” — Ghosh Resonant Protocol
+=======
+# ⚙️ GHOSH ROBOTICS
+Private Research Division in Resonant Intelligence & Vibrational Systems
+>>>>>>> af004dd665377fd61e4aa72891ac318c4c817983

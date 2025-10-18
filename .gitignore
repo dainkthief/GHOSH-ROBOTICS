@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .cache/
 .buildozer/
 .android/
@@ -6,3 +7,11 @@
 __pycache__/
 *.pyc
 *.log
+=======
+.venv/
+backend/.venv/
+__pycache__/
+*.log
+auto_git_log.txt
+runtime/voice.wav
+>>>>>>> af004dd665377fd61e4aa72891ac318c4c817983
